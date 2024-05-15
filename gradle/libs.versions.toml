@@ -11,6 +11,8 @@ composeBom = "2023.08.00"
 accompanistDrawablepainter = "0.30.1"
 uiTextGoogleFonts = "1.6.7"
 playServices = "11.8.0"
+navigationCompose = "2.7.7"
+dagger = "2.46"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -30,6 +32,9 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 accompanist-drawablepainter = { group = "com.google.accompanist", name = "accompanist-drawablepainter", version.ref = "accompanistDrawablepainter" }
 ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 play-services = { group = "com.google.android.gms", name = "play-services", version.ref = "playServices" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+dagger = { group = "com.google.dagger", name = "dagger", version.ref = "dagger" }
+dagger-compiler = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "dagger" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

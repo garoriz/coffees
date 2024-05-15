@@ -1,4 +1,4 @@
-package com.garif.coffees.ui.theme
+package com.garif.coffees.presentation.theme.ui
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

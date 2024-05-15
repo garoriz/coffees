@@ -1,4 +1,4 @@
-package com.garif.coffees.ui.theme
+package com.garif.coffees.presentation.theme.ui
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
@@ -42,6 +42,37 @@ val Typography = Typography(
         letterSpacing = 0.sp,
         color = BodyBrown
     ),
+    titleMedium = TextStyle(
+        fontFamily = fonts,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 17.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.sp,
+        color = TextColor
+    ),
+    displaySmall = TextStyle(
+        fontFamily = fonts,
+        fontWeight = FontWeight.Medium,
+        fontSize = 16.sp,
+        letterSpacing = 0.sp,
+        color = VolumeTextColor
+    ),
+    displayMedium = TextStyle(
+        fontFamily = fonts,
+        fontWeight = FontWeight.Bold,
+        fontSize = 18.sp,
+        lineHeight = 2.sp,
+        letterSpacing = 0.sp,
+        color = PriceTextColor
+    ),
+    labelMedium = TextStyle(
+        fontFamily = fonts,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 16.sp,
+        lineHeight = 22.sp,
+        letterSpacing = 0.sp,
+        color = TextColor
+    )
     /* Other default text styles to override
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,
