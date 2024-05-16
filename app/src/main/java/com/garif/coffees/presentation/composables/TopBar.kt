@@ -23,26 +23,31 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import com.garif.coffees.R
+import com.garif.coffees.presentation.MainViewModel
 import com.garif.coffees.presentation.theme.ui.BorderColor
 import com.garif.coffees.presentation.theme.ui.LocalDim
 import com.garif.coffees.presentation.util.Screen
 
 @Composable
 fun TopBar(
-    modifier: Modifier = Modifier,
     innerPadding: PaddingValues,
     time: String,
     temperature: String,
     navController: NavController,
+    viewModel: MainViewModel,
 ) {
-    Column {
+    Column() {
         TopRow(
             modifier = Modifier
-                .padding(innerPadding)
-                .offset(y = LocalDim.current.dp16),
+                .padding(
+                    top = innerPadding.calculateTopPadding() + LocalDim.current.dp16,
+                    bottom = LocalDim.current.dp16,
+                    start = LocalDim.current.dp26,
+                ),
             time,
             temperature,
-            navController
+            navController,
+            viewModel
         )
         Divider(
             color = BorderColor,
@@ -59,24 +64,20 @@ fun TopRow(
     time: String,
     temperature: String,
     navController: NavController,
+    viewModel: MainViewModel,
 ) {
     Row(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(
-                start = LocalDim.current.dp26,
-                end = LocalDim.current.dp26,
-                bottom = LocalDim.current.dp16
-            ),
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        TopLeftRow(navController)
+        TopLeftRow(navController, viewModel)
         TopRightRow(time, temperature)
     }
 }
 
 @Composable
-fun TopLeftRow(navController: NavController) {
+fun TopLeftRow(navController: NavController, viewModel: MainViewModel) {
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -85,7 +86,7 @@ fun TopLeftRow(navController: NavController) {
             painter = painterResource(id = R.drawable.runero_logo),
             contentDescription = null,
             modifier = Modifier
-                .size(LocalDim.current.dp24)
+                .size(LocalDim.current.dp24),
         )
         ClickableText(
             text = AnnotatedString(stringResource(id = R.string.runero)),
@@ -93,7 +94,9 @@ fun TopLeftRow(navController: NavController) {
                 .offset(x = LocalDim.current.dp12),
             style = MaterialTheme.typography.titleSmall,
             onClick = {
-                navController.navigate(Screen.DrinkSettingsScreen.route)
+                if (navController.currentBackStackEntry?.destination?.route == Screen.CatalogScreen.route) {
+                    navController.navigate(Screen.DrinkSettingsScreen.route)
+                }
             }
         )
         Text(
@@ -114,7 +117,7 @@ fun TopRightRow(time: String, temperature: String) {
         Text(
             text = time,
             style = MaterialTheme.typography.labelSmall,
-            modifier = Modifier.padding(start = LocalDim.current.dp24, end = LocalDim.current.dp24)
+            modifier = Modifier.padding(start = LocalDim.current.dp24)
         )
         Degrees(temperature)
         Language()
@@ -144,7 +147,7 @@ fun Degrees(temperature: String) {
 fun Language() {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(start = LocalDim.current.dp24, end = LocalDim.current.dp24)
+        modifier = Modifier.padding(start = LocalDim.current.dp24, end = LocalDim.current.dp50)
     ) {
         Image(
             painter = painterResource(id = R.drawable.russia),

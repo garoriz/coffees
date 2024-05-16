@@ -1,5 +1,6 @@
 package com.garif.coffees.presentation.theme.ui
 
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 val Purple80 = Color(0xFFD0BCFF)
@@ -18,4 +19,8 @@ val BackgroundTileColor = Color(0xFF100909)
 val TextColor = Color(0xFFC4A79B)
 val VolumeTextColor = Color(0xFF514541)
 val PriceTextColor = Color(0xFFF77416)
-val TextFieldColor = Color(0xFF150E0C)
+val TextFieldBgColor = Color(0xFF150E0C)
+val TextFieldColor = Color(0xFFFFF2ED)
+val SwitchColor = Brush.horizontalGradient(listOf(Color((0xFFEE4E2B)), Color(0xFFFF9900)))
+val BtnTextColor = Color(0xFFFFFAF7)
+val BtnColor = Color(0xFFF77416)

@@ -31,7 +31,6 @@ fun CoffeeTile(coffee: Coffee) {
             ),
         colors = CardDefaults.cardColors(
             containerColor = BackgroundTileColor,
-            //contentColor = Color.White
         )
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {

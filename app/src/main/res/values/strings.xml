@@ -8,4 +8,14 @@
     <string name="_19_34">19:34</string>
     <string name="title">Наименование</string>
     <string name="sp_title">title</string>
+    <string name="sp_price">price</string>
+    <string name="price">Цена</string>
+    <string name="rub">₽</string>
+    <string name="sell_for_free">Продавать бесплатно</string>
+    <string name="save">Сохранить</string>
+    <string name="amaretto_coffee">Кофе амаретто</string>
+    <string name="_199">199</string>
+    <string name="is_free_drink">isFreeDrink</string>
+    <string name="is_cream_cappuccino">isCreamCappuccino</string>
+    <string name="is_mokkachno">isMokkachino</string>
 </resources>
