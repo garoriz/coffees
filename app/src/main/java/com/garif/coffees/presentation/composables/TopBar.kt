@@ -3,7 +3,6 @@ package com.garif.coffees.presentation.composables
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,31 +22,27 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import com.garif.coffees.R
-import com.garif.coffees.presentation.MainViewModel
 import com.garif.coffees.presentation.theme.ui.BorderColor
 import com.garif.coffees.presentation.theme.ui.LocalDim
 import com.garif.coffees.presentation.util.Screen
 
 @Composable
 fun TopBar(
-    innerPadding: PaddingValues,
     time: String,
     temperature: String,
     navController: NavController,
-    viewModel: MainViewModel,
 ) {
     Column() {
         TopRow(
             modifier = Modifier
                 .padding(
-                    top = innerPadding.calculateTopPadding() + LocalDim.current.dp16,
+                    top = LocalDim.current.dp16,
                     bottom = LocalDim.current.dp16,
                     start = LocalDim.current.dp26,
                 ),
             time,
             temperature,
-            navController,
-            viewModel
+            navController
         )
         Divider(
             color = BorderColor,
@@ -64,21 +59,19 @@ fun TopRow(
     time: String,
     temperature: String,
     navController: NavController,
-    viewModel: MainViewModel,
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        TopLeftRow(navController, viewModel)
+        TopLeftRow(navController)
         TopRightRow(time, temperature)
     }
 }
 
 @Composable
-fun TopLeftRow(navController: NavController, viewModel: MainViewModel) {
-
+fun TopLeftRow(navController: NavController) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
     ) {

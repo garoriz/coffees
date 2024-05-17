@@ -18,7 +18,7 @@ class MainViewModel : ViewModel() {
     private val _state = mutableStateOf(MainState())
     val state: State<MainState> = _state
 
-    init {
+    fun update() {
         updateTimeOnEachMinute()
         updateTemperature()
     }

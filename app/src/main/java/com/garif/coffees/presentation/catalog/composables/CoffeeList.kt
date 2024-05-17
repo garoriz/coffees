@@ -11,10 +11,11 @@ import com.garif.coffees.presentation.theme.ui.LocalDim
 fun CoffeeList(
     list: List<Coffee>,
     modifier: Modifier,
+    isFreeDrink: Boolean,
 ) {
     LazyVerticalGrid(columns = GridCells.Adaptive(LocalDim.current.dp228), modifier = modifier) {
         items(list.size) {
-            CoffeeTile(Coffee())
+            CoffeeTile(list[0], isFreeDrink)
         }
     }
 }

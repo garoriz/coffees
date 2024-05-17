@@ -1,6 +1,7 @@
 package com.garif.coffees.presentation.drinksettings.composables
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -25,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,6 +42,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
+import androidx.navigation.NavController
 import com.garif.coffees.R
 import com.garif.coffees.presentation.theme.ui.BorderColor
 import com.garif.coffees.presentation.theme.ui.BtnColor
@@ -47,30 +50,37 @@ import com.garif.coffees.presentation.theme.ui.LocalDim
 import com.garif.coffees.presentation.theme.ui.SwitchColor
 import com.garif.coffees.presentation.theme.ui.TextFieldBgColor
 import com.garif.coffees.presentation.util.GradientSwitch
+import com.garif.coffees.presentation.util.Screen
 import com.garif.coffees.presentation.util.getActivity
 
 @Composable
-fun DrinkSettingsScreen() {
+fun DrinkSettingsScreen(navController: NavController) {
     val context = LocalContext.current
     val activity = context.getActivity()
     val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+    val spTitle = stringResource(id = R.string.sp_title)
     val title = sharedPref.getString(
-        stringResource(id = R.string.sp_title),
+        spTitle,
         stringResource(id = R.string.amaretto_coffee)
-    )
-    var titleState by remember { mutableStateOf(title?.let { TextFieldValue(it) }) }
+    ) ?: spTitle
+    var titleState by remember { mutableStateOf(TextFieldValue(title)) }
+    val spPrice = stringResource(id = R.string.sp_price)
     val price = sharedPref.getString(
-        stringResource(id = R.string.sp_price),
+        spPrice,
         stringResource(id = R.string._199)
-    )
-    var priceState by remember { mutableStateOf(price?.let { TextFieldValue(it) }) }
-    val isFreeDrink = sharedPref.getBoolean(stringResource(id = R.string.is_free_drink), false)
+    ) ?: spPrice
+    var priceState by remember { mutableStateOf(TextFieldValue(price)) }
+    val spIsFreeDrink = stringResource(id = R.string.is_free_drink)
+    val isFreeDrink = sharedPref.getBoolean(spIsFreeDrink, false)
     val isFreeDrinkState = remember { mutableStateOf(isFreeDrink) }
+    val spIsCreamCappuccino = stringResource(id = R.string.is_cream_cappuccino)
     val isCreamCappuccino =
-        sharedPref.getBoolean(stringResource(id = R.string.is_cream_cappuccino), true)
+        sharedPref.getBoolean(spIsCreamCappuccino, true)
     val isCreamCappuccinoState = remember { mutableStateOf(isCreamCappuccino) }
-    val isMokkachino = sharedPref.getBoolean(stringResource(id = R.string.is_mokkachno), false)
+    val spIsMokkachino = stringResource(id = R.string.is_mokkachino)
+    val isMokkachino = sharedPref.getBoolean(spIsMokkachino, false)
     val isMokkachinoState = remember { mutableStateOf(isMokkachino) }
+    val isEnabledSaveBtn = remember { mutableStateOf(false) }
 
     Row(
         modifier = Modifier
@@ -82,31 +92,32 @@ fun DrinkSettingsScreen() {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End,
     ) {
-        Column() {
+        Column {
             Text(
                 text = stringResource(id = R.string.title),
                 style = MaterialTheme.typography.labelMedium,
                 textAlign = TextAlign.Center,
             )
-            titleState?.let {
-                TextField(
-                    value = it,
-                    onValueChange = { titleState = it },
-                    shape = RoundedCornerShape(LocalDim.current.dp6),
-                    colors = TextFieldDefaults.colors(
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent,
-                        focusedContainerColor = TextFieldBgColor,
-                        unfocusedContainerColor = TextFieldBgColor
-                    ),
-                    textStyle = MaterialTheme.typography.displayLarge,
-                    singleLine = true,
-                    modifier = Modifier
-                        .requiredWidth(LocalDim.current.dp418)
-                        .offset(y = LocalDim.current.dp12)
-                )
-            }
+            TextField(
+                value = titleState,
+                onValueChange = {
+                    titleState = it
+                    checkOldAndNewValues(it.text, title, isEnabledSaveBtn)
+                },
+                shape = RoundedCornerShape(LocalDim.current.dp6),
+                colors = TextFieldDefaults.colors(
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                    focusedContainerColor = TextFieldBgColor,
+                    unfocusedContainerColor = TextFieldBgColor
+                ),
+                textStyle = MaterialTheme.typography.displayLarge,
+                singleLine = true,
+                modifier = Modifier
+                    .requiredWidth(LocalDim.current.dp418)
+                    .offset(y = LocalDim.current.dp12)
+            )
             Text(
                 text = stringResource(id = R.string.price),
                 style = MaterialTheme.typography.labelMedium,
@@ -115,34 +126,35 @@ fun DrinkSettingsScreen() {
                     .height(LocalDim.current.dp56)
                     .offset(y = LocalDim.current.dp48)
             )
-            priceState?.let {
-                TextField(
-                    value = it,
-                    onValueChange = { priceState = it },
-                    shape = RoundedCornerShape(LocalDim.current.dp6),
-                    colors = TextFieldDefaults.colors(
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent,
-                        focusedContainerColor = TextFieldBgColor,
-                        unfocusedContainerColor = TextFieldBgColor
-                    ),
-                    textStyle = MaterialTheme.typography.displayLarge,
-                    singleLine = true,
-                    modifier = Modifier
-                        .requiredWidth(LocalDim.current.dp418)
-                        .offset(y = LocalDim.current.dp28),
-                    suffix = {
-                        Text(
-                            text = stringResource(id = R.string.rub),
-                            style = MaterialTheme.typography.labelLarge
-                        )
-                    },
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        keyboardType = KeyboardType.NumberPassword
-                    ),
-                )
-            }
+            TextField(
+                value = priceState,
+                onValueChange = {
+                    priceState = it
+                    checkOldAndNewValues(it.text, price, isEnabledSaveBtn)
+                },
+                shape = RoundedCornerShape(LocalDim.current.dp6),
+                colors = TextFieldDefaults.colors(
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                    focusedContainerColor = TextFieldBgColor,
+                    unfocusedContainerColor = TextFieldBgColor
+                ),
+                textStyle = MaterialTheme.typography.displayLarge,
+                singleLine = true,
+                modifier = Modifier
+                    .requiredWidth(LocalDim.current.dp418)
+                    .offset(y = LocalDim.current.dp28),
+                suffix = {
+                    Text(
+                        text = stringResource(id = R.string.rub),
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                },
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.NumberPassword
+                ),
+            )
             Row(
                 modifier = Modifier
                     .offset(y = LocalDim.current.dp40)
@@ -163,7 +175,10 @@ fun DrinkSettingsScreen() {
                 )
                 GradientSwitch(
                     checked = isFreeDrinkState.value,
-                    onCheckedChange = { isFreeDrinkState.value = it },
+                    onCheckedChange = {
+                        isFreeDrinkState.value = it
+                        checkOldAndNewValues(it, isFreeDrink, isEnabledSaveBtn)
+                    },
                     modifier = Modifier
                         .offset(x = LocalDim.current.dpMinus24)
                         .scale(0.8f),
@@ -171,17 +186,34 @@ fun DrinkSettingsScreen() {
                 )
             }
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    save(
+                        sharedPref,
+                        spTitle,
+                        titleState.text,
+                        spPrice,
+                        priceState.text,
+                        spIsFreeDrink,
+                        isFreeDrinkState.value,
+                        spIsCreamCappuccino,
+                        isCreamCappuccinoState.value,
+                        spIsMokkachino,
+                        isMokkachinoState.value
+                    )
+                    navController.navigate(Screen.CatalogScreen.route)
+                },
                 shape = RoundedCornerShape(LocalDim.current.dp12),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = BtnColor,
+                    disabledContainerColor = BtnColor
                 ),
                 modifier = Modifier
                     .offset(y = LocalDim.current.dp80),
                 contentPadding = PaddingValues(
                     vertical = LocalDim.current.dp16,
                     horizontal = LocalDim.current.dp24
-                )
+                ),
+                enabled = isEnabledSaveBtn.value
             ) {
                 Text(
                     text = stringResource(id = R.string.save),
@@ -201,6 +233,7 @@ fun DrinkSettingsScreen() {
                         onValueChange = {
                             isCreamCappuccinoState.value = it
                             isMokkachinoState.value = !it
+                            checkOldAndNewValues(it, isCreamCappuccino, isEnabledSaveBtn)
                         })
                     .alpha(
                         if (isCreamCappuccinoState.value) 1f
@@ -231,6 +264,7 @@ fun DrinkSettingsScreen() {
                         onValueChange = {
                             isMokkachinoState.value = it
                             isCreamCappuccinoState.value = !it
+                            checkOldAndNewValues(it, isMokkachino, isEnabledSaveBtn)
                         })
                     .alpha(
                         if (isMokkachinoState.value) 1f
@@ -250,4 +284,38 @@ fun DrinkSettingsScreen() {
             )
         }
     }
+}
+
+fun save(
+    sharedPref: SharedPreferences,
+    spTitle: String,
+    title: String,
+    spPrice: String,
+    price: String,
+    spIsFreeDrink: String,
+    isFreeDrink: Boolean,
+    spIsCreamCappuccino: String,
+    isCreamCappuccino: Boolean,
+    spIsMokkachino: String,
+    isMokkachino: Boolean,
+) {
+    with(sharedPref.edit()) {
+        putString(spTitle, title)
+        putString(spPrice, price)
+        putBoolean(spIsFreeDrink, isFreeDrink)
+        putBoolean(spIsCreamCappuccino, isCreamCappuccino)
+        putBoolean(spIsMokkachino, isMokkachino)
+        apply()
+    }
+}
+
+fun checkOldAndNewValues(
+    newValue: Any,
+    oldValue: Any?,
+    isEnabledSaveBtn: MutableState<Boolean>,
+) {
+    if (newValue != oldValue)
+        isEnabledSaveBtn.value = true
+    else
+        isEnabledSaveBtn.value = false
 }

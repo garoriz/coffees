@@ -20,7 +20,7 @@ import com.garif.coffees.presentation.theme.ui.BackgroundTileColor
 import com.garif.coffees.presentation.theme.ui.LocalDim
 
 @Composable
-fun CoffeeTile(coffee: Coffee) {
+fun CoffeeTile(coffee: Coffee, isFreeDrink: Boolean) {
     Card(
         shape = RoundedCornerShape(LocalDim.current.dp6),
         modifier = Modifier
@@ -48,7 +48,7 @@ fun CoffeeTile(coffee: Coffee) {
                 textAlign = TextAlign.Center,
                 modifier = Modifier.height(LocalDim.current.dp56)
             )
-            BottomCoffeeTile(coffee)
+            BottomCoffeeTile(coffee, isFreeDrink)
         }
     }
 }
